@@ -1,0 +1,56 @@
+<html>
+<head>
+<script type="text/javascript" language="javascript"/> 
+//This function will be called when the form is submited
+function saveData() 
+{
+var comment = document.getElementById("comment").value;
+var email = document.getElementById("email").value;
+//By calling this file, we have saved the data.
+http.open("GET","save_data.php?comment=" + comment + "&email=" + email + "&return=confirm",true);
+http.onreadystatechange = function() 
+{
+if(http.readyState == 4) 
+{
+if(http.status == 200) 
+{
+var result = http.responseText;
+var msg = ""
+if(result == '1') 
+{
+//Display the thank you message.
+msg = "Thank you for your interest - we will look into your comment as soon as possible.";
+} 
+else 
+{
+msg = "There was an error in inserting the record : " . result;
+}
+document.getElementById("form_elements").innerHTML = msg;
+}
+}
+}
+http.send(null);
+return false;//Prevent the form from being submited
+}
+</script>
+</head>
+
+<form name="feedback_form" id="feedback_form" method="POST" action="feedback.htmlg">
+<fieldset>
+<legend>A simple feedback form</legend>
+<div id="form_elements">
+<label for="comment">Comments</label>
+
+<textarea name="comment" id="comment" rows="5" cols="30"></textarea>
+
+<label for="email">E-Mail</label>
+
+
+
+
+</div>
+</fieldset>
+<input type="button" value="send">
+</form>
+
+</html>

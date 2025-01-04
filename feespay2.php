@@ -1,0 +1,32 @@
+<?php
+$pagecode="01";
+session_start();
+$_SESSION["pagecode"]=$pagecode;
+include 'config.php';
+//require('logincheck.php');
+$rollno=$_POST['rollno'];
+$paymentfor=$_POST['paymentfor'];
+$expdate=$_POST['expdate'];
+$cardno=$_POST['cardno'];
+$cardname=$_POST['cardname'];
+$paymenttowards=$_POST['paymenttowards'];
+$paymentmode=$_POST['paymentmode'];
+$receiptno=$_POST['receiptno'];
+$paymenttype=$_POST['paymenttype'];
+$discount=$_POST['discount'];
+$paidamount=$_POST['amount'];
+$comment=$_POST['comment'];
+$bank=$_POST['bank'];
+$datee=date("Y-m-d");
+$status="Active";
+echo $discount;
+mysql_connect("$serverip",$username,$password);
+@mysql_select_db($database) or die( "Unable to select database");
+$st="paid";
+echo $paymentfor;
+echo $rollno;
+$query = " UPDATE n_accounts SET status='$st',expdate='$expdate',cardno='$cardno',cardname='$cardname',paymentmode='$paymentmode',billno='$receiptno',paymenttype='$paymenttype',discount='$discount',paidamount='$paidamount',comment='$comment',bank='$bank',date='$datee' WHERE rollno='$rollno' AND formonth='$paymentfor'";
+mysql_query($query);
+mysql_close();
+echo "You have Successfully Paid";
+?>

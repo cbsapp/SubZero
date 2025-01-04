@@ -1,0 +1,61 @@
+<?php
+$dbservertype='mysql';
+$servername='localhost';
+// username and password to log onto db server
+$dbusername='root';
+$dbpassword='arena123';
+// name of database
+$dbname='rk';
+
+connecttodb($servername,$dbname,$dbusername,$dbpassword);
+function connecttodb($servername,$dbname,$dbuser,$dbpassword)
+{
+global $link;
+$link=mysql_connect ("$servername","$dbuser","$dbpassword");
+if(!$link){die("Could not connect to MySQL");}
+mysql_select_db("$dbname",$link) or die ("could not open db".mysql_error());
+}
+?>
+<!doctype html public "-//w3c//dtd html 3.2//en">
+<html>
+<head>
+<title>Multiple drop down list box from plus2net</title>
+function reload(form)
+{
+var val=form.cat.options[form.cat.options.selectedIndex].value;
+self.locationfiltered='dd.php?cat=' + val;
+}
+</script>
+</head>
+<?
+
+///////// Getting the data from Mysql table for first list box//////////
+$quer2=mysql_query("SELECT DISTINCT coursec,courseval FROM course_info order by coursec"); 
+///////////// End of query for first list box////////////
+/////// for second drop down list we will check if category is selected else we will display all the subcategory///// 
+if(isset($cat) and strlen($cat) > 0){
+$quer=mysql_query("SELECT DISTINCT coursedts FROM _course_info where courseval=$cat order by coursedts"); 
+}else{$quer=mysql_query("SELECT DISTINCT coursedts FROM _course_info order by coursedts"); } 
+////////// end of query for second subcategory drop down list box ///////////////////////////
+echo "<form method=post name=f1 action='dd-check.php'>";
+/// Add your form processing page address to action in above line. Example  actionfiltered=dd-check.php////
+//////////        Starting of first drop downlist /////////
+echo "<select name='cat' onfiltered=\"reload(this.form)\"><option value=''>Select one</option>";
+while($noticia2 = mysql_fetch_array($quer2)) { 
+if($noticia2['courseval']==@$cat){echo "<option selected value='$noticia2[courseval]'>$noticia2[coursec]</option>"."<BR>";}
+else{echo  "<option value='$noticia2[courseval]'>$noticia2[coursec]</option>";}
+}
+echo "</select>";
+//////////////////  This will end the first drop down list ///////////
+//////////        Starting of second drop downlist /////////
+echo "<select name='subcat'><option value=''>Select one</option>";
+while($noticia = mysql_fetch_array($quer)) { 
+echo  "<option value='$noticia[coursedts]'>$noticia[coursedts]</option>";
+}
+echo "</select>";
+//////////////////  This will end the second drop down list ///////////
+//// Add your other form fields as needed here/////
+echo "<input type=submit value=Submit>";
+echo "</form>";
+?>
+</html>
